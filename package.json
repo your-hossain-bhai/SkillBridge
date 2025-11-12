@@ -1,0 +1,22 @@
+{
+  "name": "skillbridge",
+  "version": "1.0.0",
+  "description": "SkillBridge - Connect your skills with opportunities",
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm run install:server && npm run install:client",
+    "seed": "cd server && node scripts/seed.js"
+  },
+  "keywords": [
+    "mern",
+    "career",
+    "jobs",
+    "learning"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+
