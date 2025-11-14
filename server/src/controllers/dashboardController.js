@@ -1,6 +1,7 @@
 import Job from '../models/Job.js';
 import Resource from '../models/Resource.js';
 import User from '../models/User.js';
+import { getAIJobRecommendations } from '../services/ai/jobMatcher.js';
 
 /**
  * Get dashboard recommendations for logged-in user
@@ -17,37 +18,16 @@ export const getRecommendations = async (req, res) => {
     const userSkills = user.skills || [];
     const preferredTrack = user.preferredTrack || '';
 
-    // Rule-based job matching
+    // Enhanced AI job matching
     const allJobs = await Job.find({});
-    const jobRecommendations = allJobs
-      .map(job => {
-        // Find matching skills
-        const matchedSkills = userSkills.filter(skill =>
-          job.requiredSkills.some(requiredSkill =>
-            requiredSkill.toLowerCase().includes(skill.toLowerCase()) ||
-            skill.toLowerCase().includes(requiredSkill.toLowerCase())
-          )
-        );
-
-        const matchCount = matchedSkills.length;
-
-        return {
-          job,
-          matchCount,
-          matchedSkills,
-          reason: matchCount > 0
-            ? `Matches: ${matchedSkills.join(', ')}`
-            : 'No skill matches found'
-        };
-      })
-      .filter(rec => rec.matchCount > 0)
-      .sort((a, b) => b.matchCount - a.matchCount)
+    const jobRecommendations = await getAIJobRecommendations(user, allJobs);
+    
+    // Format for response
+    const formattedRecommendations = jobRecommendations
       .slice(0, 10) // Top 10 recommendations
-      .map(rec => ({
-        ...rec.job.toObject(),
-        matchCount: rec.matchCount,
-        matchedSkills: rec.matchedSkills,
-        reason: rec.reason
+      .map(job => ({
+        ...job,
+        matchCount: job.skillMatchCount || 0
       }));
 
     // Rule-based resource matching

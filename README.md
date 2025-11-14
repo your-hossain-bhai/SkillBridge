@@ -12,6 +12,8 @@ SkillBridge helps users discover career opportunities and learning resources bas
 - **Backend**: Node.js + Express
 - **Database**: MongoDB (Mongoose)
 - **Authentication**: JWT (jsonwebtoken) + bcrypt
+- **AI**: OpenAI API (optional, with fallbacks)
+- **File Upload**: Multer
 - **Deployment**: Render
 
 ## Local Setup
@@ -48,6 +50,7 @@ SkillBridge helps users discover career opportunities and learning resources bas
    JWT_SECRET=supersecret_jwt_key_change_in_production
    PORT=4000
    NODE_ENV=development
+   OPENAI_API_KEY=your_openai_api_key_here  # Optional, for AI features
    ```
 
    For MongoDB Atlas, use:
@@ -250,8 +253,27 @@ SkillBridge/
 ### Dashboard
 - `GET /api/dashboard/recommendations` - Get personalized recommendations (auth required)
 
-### AI (Part 2 - Placeholders)
-- `POST /api/ai/parse-resume` - Resume parsing (returns 501/mock)
+### Skills (Part 2)
+- `POST /api/skills/extract` - Extract skills from CV (file upload or text)
+- `PUT /api/skills/update` - Update user skills
+
+### Jobs (Enhanced in Part 2)
+- `GET /api/jobs/match/:userId` - Get matched jobs with percentages
+- `GET /api/jobs/:id/match` - Get detailed match analysis for a job
+
+### Roadmap (Part 2)
+- `POST /api/roadmap/generate` - Generate career roadmap
+- `GET /api/roadmap/current` - Get user's current roadmap
+- `PUT /api/roadmap/:id/progress` - Update roadmap progress
+
+### Learning (Part 2)
+- `GET /api/learning/recommendations/:userId` - Get skill gap analysis and recommendations
+
+### CareerBot (Part 2)
+- `POST /api/careerbot/chat` - Chat with AI career mentor
+
+### AI (Part 2 - Legacy)
+- `POST /api/ai/parse-resume` - Legacy endpoint (use /api/skills/extract instead)
 
 ### Webhooks (Part 2 - Placeholders)
 - `POST /api/webhooks/n8n` - n8n webhook handler
@@ -259,25 +281,36 @@ SkillBridge/
 ### Development
 - `POST /api/seed` - Seed database (dev only)
 
-## Part 2 Integration Points
+## Part 2 Features
 
-The following files and routes are prepared for Part 2 AI and n8n integration:
+See [PART2-FEATURES.md](./PART2-FEATURES.md) for detailed documentation of all Part 2 features.
 
-### AI Services
-- `server/src/services/ai/resumeParser.js` - Resume parsing with OpenAI/ML
-- `server/src/services/ai/jobMatcher.js` - AI-powered job matching
-- `server/src/routes/ai.js` - AI API routes
+### Implemented AI Services
+- `server/src/services/ai/skillExtractor.js` - Skill extraction (OpenAI + keyword fallback)
+- `server/src/services/ai/resumeParser.js` - Resume/CV parsing
+- `server/src/services/ai/jobMatcher.js` - Enhanced job matching with percentages
+- `server/src/services/ai/skillGapAnalyzer.js` - Skill gap analysis
+- `server/src/services/ai/roadmapGenerator.js` - Career roadmap generation
+- `server/src/services/ai/careerBot.js` - AI chatbot mentor
 
-### n8n Integration
+### New Models
+- `server/src/models/Roadmap.js` - Career roadmap model
+
+### New Controllers
+- `server/src/controllers/skillController.js` - Skill extraction
+- `server/src/controllers/roadmapController.js` - Roadmap management
+- `server/src/controllers/careerBotController.js` - Chatbot
+- `server/src/controllers/learningController.js` - Learning recommendations
+
+### New Frontend Components
+- `client/src/components/SkillExtractor.jsx` - CV upload and skill extraction
+- `client/src/components/RoadmapViewer.jsx` - Career roadmap display
+- `client/src/components/CareerBot.jsx` - Chatbot interface
+- `client/src/components/SkillGapAnalysis.jsx` - Skill gap visualization
+
+### n8n Integration (Placeholder)
 - `server/src/services/n8n/webhookHandler.js` - n8n webhook processing
 - `server/src/routes/webhooks.js` - Webhook routes
-
-### TODO Comments
-All placeholder files contain `// TODO: Part 2` comments indicating where to implement:
-- OpenAI API integration for resume parsing
-- ML models for job matching
-- n8n workflow triggers and handlers
-- Vector database integration for semantic search
 
 ## Features
 
@@ -290,12 +323,15 @@ All placeholder files contain `// TODO: Part 2` comments indicating where to imp
 - ✅ Responsive UI with Tailwind CSS
 - ✅ Seed script for sample data
 
-### Part 2 (Future)
-- 🔜 AI-powered resume parsing
-- 🔜 Advanced job matching with ML
-- 🔜 n8n automation workflows
-- 🔜 Personalized learning paths
-- 🔜 Career milestone tracking
+### Part 2 (Implemented ✅)
+- ✅ AI-powered resume parsing (OpenAI + keyword fallback)
+- ✅ Intelligent job matching with match percentages
+- ✅ Skill gap analysis and learning recommendations
+- ✅ AI-generated career roadmaps
+- ✅ CareerBot chatbot assistant
+- ✅ Enhanced job matching with missing skills identification
+- 🔜 n8n automation workflows (placeholder)
+- 🔜 PDF roadmap download (placeholder)
 
 ## Environment Variables
 

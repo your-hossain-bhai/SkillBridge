@@ -33,6 +33,20 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  externalLinks: {
+    linkedin: {
+      type: String,
+      default: ''
+    },
+    bdjobs: {
+      type: String,
+      default: ''
+    },
+    other: {
+      type: String,
+      default: ''
+    }
+  },
   postedAt: {
     type: Date,
     default: Date.now

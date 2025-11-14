@@ -1,4 +1,7 @@
 import Job from '../models/Job.js';
+import User from '../models/User.js';
+import { getAIJobRecommendations, calculateJobMatch } from '../services/ai/jobMatcher.js';
+import { analyzeSkillGap } from '../services/ai/skillGapAnalyzer.js';
 
 /**
  * Get all jobs with filters and pagination
@@ -79,6 +82,73 @@ export const getJobById = async (req, res) => {
   } catch (error) {
     console.error('Get job error:', error);
     res.status(500).json({ error: 'Failed to fetch job' });
+  }
+};
+
+/**
+ * Get matched jobs for user with match percentage
+ * GET /api/jobs/match/:userId
+ */
+export const getMatchedJobs = async (req, res) => {
+  try {
+    const userId = req.params.userId || req.user?._id;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const allJobs = await Job.find({});
+    const matchedJobs = await getAIJobRecommendations(user, allJobs);
+
+    res.json({
+      success: true,
+      jobs: matchedJobs,
+      count: matchedJobs.length
+    });
+  } catch (error) {
+    console.error('Get matched jobs error:', error);
+    res.status(500).json({ error: 'Failed to fetch matched jobs' });
+  }
+};
+
+/**
+ * Get job match details with skill gap analysis
+ * GET /api/jobs/:id/match
+ */
+export const getJobMatchDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+
+    const job = await Job.findById(id);
+    if (!job) {
+      return res.status(404).json({ error: 'Job not found' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Calculate match
+    const match = calculateJobMatch(user, job);
+
+    // Get skill gap analysis
+    const gapAnalysis = await analyzeSkillGap(user.skills || [], job.requiredSkills || []);
+
+    res.json({
+      success: true,
+      match,
+      gapAnalysis
+    });
+  } catch (error) {
+    console.error('Get job match details error:', error);
+    res.status(500).json({ error: 'Failed to get job match details' });
   }
 };
 

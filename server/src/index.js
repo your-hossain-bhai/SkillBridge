@@ -11,6 +11,10 @@ import dashboardRoutes from './routes/dashboard.js';
 import aiRoutes from './routes/ai.js';
 import webhookRoutes from './routes/webhooks.js';
 import seedRoutes from './routes/seed.js';
+import skillsRoutes from './routes/skills.js';
+import roadmapRoutes from './routes/roadmap.js';
+import careerbotRoutes from './routes/careerbot.js';
+import learningRoutes from './routes/learning.js';
 
 dotenv.config();
 
@@ -53,6 +57,10 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api/seed', seedRoutes);
+app.use('/api/skills', skillsRoutes);
+app.use('/api/roadmap', roadmapRoutes);
+app.use('/api/careerbot', careerbotRoutes);
+app.use('/api/learning', learningRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

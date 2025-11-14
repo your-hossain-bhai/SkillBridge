@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  currentRoadmap: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Roadmap',
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now

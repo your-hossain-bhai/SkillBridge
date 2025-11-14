@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import Card from '../components/Card';
 import SkillPill from '../components/SkillPill';
+import SkillExtractor from '../components/SkillExtractor';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -97,6 +98,13 @@ const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-3xl font-bold mb-6">Edit Profile</h1>
+
+      {/* Skill Extractor Section */}
+      <div className="mb-6">
+        <SkillExtractor onSkillsExtracted={(skills) => {
+          setFormData(prev => ({ ...prev, skills }));
+        }} />
+      </div>
 
       <Card>
         <form onSubmit={handleSubmit} className="space-y-6">

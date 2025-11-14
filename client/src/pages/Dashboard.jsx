@@ -5,6 +5,9 @@ import Card from '../components/Card';
 import Tag from '../components/Tag';
 import ProgressBar from '../components/ProgressBar';
 import SkillPill from '../components/SkillPill';
+import SkillGapAnalysis from '../components/SkillGapAnalysis';
+import RoadmapViewer from '../components/RoadmapViewer';
+import CareerBot from '../components/CareerBot';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -84,6 +87,15 @@ const Dashboard = () => {
                     <Tag variant="info">{job.jobType}</Tag>
                   </div>
                   <p className="text-sm text-gray-700 mb-3 line-clamp-2">{job.description}</p>
+                  {job.matchPercentage !== undefined && (
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-600">Match Score</span>
+                        <span className="text-sm font-bold text-purple-600">{job.matchPercentage}%</span>
+                      </div>
+                      <ProgressBar percentage={job.matchPercentage} />
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2 mb-3">
                     {job.matchedSkills?.slice(0, 3).map((skill) => (
                       <SkillPill key={skill} skill={skill} />
@@ -168,6 +180,21 @@ const Dashboard = () => {
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Skill Gap Analysis */}
+      <div className="mt-8">
+        <SkillGapAnalysis />
+      </div>
+
+      {/* Career Roadmap */}
+      <div className="mt-8">
+        <RoadmapViewer />
+      </div>
+
+      {/* CareerBot */}
+      <div className="mt-8">
+        <CareerBot />
       </div>
     </div>
   );
