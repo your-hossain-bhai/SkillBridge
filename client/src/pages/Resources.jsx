@@ -85,7 +85,16 @@ const Resources = () => {
         {resources.length > 0 ? (
           resources.map((resource) => (
             <Card key={resource._id}>
-              <div className="h-40 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-4"></div>
+              <div className="h-40 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-4 overflow-hidden">
+                <img 
+                  src={resource.imageUrl || 'https://via.placeholder.com/300x200?text=Learning+Resource'} 
+                  alt={resource.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/300x200?text=Learning+Resource';
+                  }}
+                />
+              </div>
               <div className="mb-2">
                 <Tag variant="default">{resource.platform}</Tag>
               </div>
